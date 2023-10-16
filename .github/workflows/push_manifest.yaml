@@ -26,7 +26,7 @@ jobs:
       - name: Push to dev
         ## your main branch
         ## push the image name to env-dev/${{ github.repository }}
-        if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/master' }}
         uses: tespkg/action@deploy_to_dev
         with:
           ALIAS_GITHUB_REPOSITORY: ${{ github.repository }}
