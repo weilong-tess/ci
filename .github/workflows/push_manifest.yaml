@@ -1,0 +1,42 @@
+name: build_and_push_to_manifest
+on:
+  push:
+    branches:
+      - '*'
+    # tags:
+    #   - '*.*.*'
+  pull_request:
+  workflow_dispatch:
+env:
+  GITLAB_REGISTRY: registry.gitlab.com/target-digital-transformation/devops
+  DEFAULT_MOULE: true ## true, ingore, default is true
+  SECOND_MODULE: null ## null, ignore, ${MODULE_NAME}, default is null
+  SECOND_MODULE_FOR_COMMON: 'common2 common3'
+  THIRD_MODULE: null
+  THIRD_MODULE_FOR_COMMON: 'common4 common5'
+
+jobs:
+  push_to_manifest:
+    runs-on: ubuntu-latest
+    name: push to manifest
+    if: ${{ github.ref != 'tag' }}
+    needs:
+      - build_and_push_image
+    steps:
+      - name: Checkout manifest repo
+        uses: actions/checkout@v2
+        with:
+          repository: tespkg/tes_manifests
+          token: ${{ secrets.TES_MANIFEST_TOKEN }}
+
+      # - name: Set up tools
+      #   uses: tespkg/action@set_up_tools
+
+      # - name: Push to dev
+      #   ## your main branch
+      #   ## push the image name to env-dev/${{ github.repository }}
+      #   if: ${{ github.ref == 'refs/heads/main' }}
+      #   uses: tespkg/action@deploy_to_dev
+      #   with:
+      #     ALIAS_GITHUB_REPOSITORY: ${{ github.repository }}
+      #     TES_ENV: dev
